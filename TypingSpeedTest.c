@@ -100,10 +100,10 @@ float calculate_words_per_minute(int press_count, int err_count, time_t elapsed_
 
 void print_speed(int press_count, int err_count, time_t elapsed_time)
 {
-    printf("Total of keypresses: %d\n", press_count);
+    printf("\nTotal of keypresses: %d\n", press_count);
     printf("Total of errors: %d\n", err_count);
     printf("Accuracy: %.2f%%\n", calculate_accuracy(press_count, err_count));
-    printf("\033[0;33mElapsed time: %.2f seconds\033[0m\n", (float)elapsed_time);
+    printf("Elapsed time: %.2f seconds\n", (float)elapsed_time);
 }
 
 void show_statistics(int press_count, int err_count, time_t elapsed_time)
@@ -113,8 +113,18 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("Congratulations! You have typed the text correctly!: ");
     print_text();
 
-    print_speed(press_count, err_count, elapsed_time);
-    printf("Words per minute: %.2f\n", calculate_words_per_minute(press_count, err_count, elapsed_time));
+    printf("\nHere are your results:\n");
+
+    printf("+---------------------------+-----------------+\n");
+    printf("| %-25s | %-15s |\n", "Metric (Unity)", "Value");
+    printf("+---------------------------+-----------------+\n");
+    printf("| %-25s | %-15.2f |\n", "Time Elapsed (s)", (float)elapsed_time);
+    printf("| %-25s | %-15.2f |\n", "Percentage Completed (%)", (strlen(user_text) / (float)strlen(original_text)) * 100);
+    printf("| %-25s | %-15d |\n", "Total Keypresses", press_count);
+    printf("| %-25s | %-15d |\n", "Total Errors", err_count);
+    printf("| %-25s | %-15.2f |\n", "Accuracy (%)", calculate_accuracy(press_count, err_count));
+    printf("| %-25s | %-15.2f |\n", "WPM", calculate_words_per_minute(press_count, err_count, elapsed_time));
+    printf("+---------------------------+-----------------+\n");
 }
 
 int main()
