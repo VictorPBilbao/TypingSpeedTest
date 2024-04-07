@@ -9,9 +9,10 @@
 
 char original_text[] = "A Hare was making fun of the Tortoise one day for being so slow. 'Do you ever get anywhere?' he asked with a mocking laugh. 'Yes,' replied the Tortoise, 'and I get there sooner than you think. I'll run you a race and prove it.' The Hare was much amused at the idea of running a race with the Tortoise, but for the fun of the thing he agreed. So the Fox, who had consented to act as judge, marked the distance and started the runners off. The Hare was soon far out of sight, and to make the Tortoise feel very deeply how ridiculous it was for him to try a race with a Hare, he lay down beside the course to take a nap until the Tortoise should catch up. The Tortoise meanwhile kept going slowly but steadily, and, after a time, passed the place where the Hare was sleeping. But the Hare slept on very peacefully; and when at last he did wake up, the Tortoise was near the goal. The Hare now ran his swiftest, but he could not overtake the Tortoise in time.";
 // char original_text[] = "The quick brown fox jumps over the lazy dog.";
-char user_text[100] = "";
+char user_text[255] = "";
+char error_text[255] = "";
 
-int TIME_LIMIT = 30;
+int TIME_LIMIT = 100;
 
 void print_main_menu()
 {
@@ -81,7 +82,8 @@ void set_cursor_position(int x, int y)
 void print_text()
 {
     printf("\033[0;32m%s\033[0m", user_text);
-    printf("%s \n", original_text + strlen(user_text));
+    printf("\033[0;31m%s\033[0m", error_text);
+    printf("%s \n", original_text + strlen(user_text) + strlen(error_text));
 }
 
 float calculate_accuracy(int press_count, int err_count)
@@ -130,7 +132,7 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("+---------------------------+-----------------+\n");
 
     Sleep(10000);
-    printf("\n Press any key to exit...");
+    printf("\nPress any key to exit...\n");
     getch();
 }
 
@@ -177,15 +179,32 @@ int main()
             next_letter[1] = '\0'; // convert int to string
             if (next_letter[0] == original_text[index_position])
             {
-                strcat(user_text, next_letter);
-                index_position++;
+                if (strlen(error_text) == 0)
+                {
+                    strcat(user_text, next_letter);
+                    index_position++;
+                }
+                else
+                {
+                    strcat(error_text, next_letter);
+                    err_count++;
+                }
+            }
+            else if (keypress == 8)
+            {
+                if (strlen(error_text) > 0)
+                {
+                    error_text[strlen(error_text) - 1] = '\0';
+                }
             }
             else
             {
+                strcat(error_text, next_letter);
                 err_count++;
+                Beep(350, 150);
             }
         }
-        if (strcmp(original_text, user_text) == 0 || (start_time != 0 && elapsed_time >= TIME_LIMIT)) // if the user has typed the entire text or 60 seconds have passed
+        if ((strcmp(original_text, user_text) == 0 && strlen(error_text) == 0) || (start_time != 0 && elapsed_time >= TIME_LIMIT)) // if the user has typed the entire text or 60 seconds have passed
         {
             break;
         }
