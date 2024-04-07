@@ -47,6 +47,8 @@ void print_speed(int press_count, int err_count, time_t start_time)
 
 void print_main_menu()
 {
+    int choice;
+
     printf(" _____  _  _  _ __  _        __ _        ___  _ __               _        _____           _         \n");
     printf("|_   _|| || || '_ \\(_) _ _  / _` |      / __|| '_ \\ ___  ___  __| |      |_   _| ___  ___| |_     \n");
     printf("  | |   \\_. || .__/| || ' \\ \\__. |      \\__ \\| .__// -_)/ -_)/ _` |        | |  / -_)(_-/|  _| \n");
@@ -57,8 +59,37 @@ void print_main_menu()
     printf("2. Custom\n");
     printf("3. Leaderboard\n");
     printf("4. Exit\n");
+}
+
+void get_menu_selection()
+{
+    int choice;
     printf("Please enter your choice: ");
-    getch();
+    scanf("%d", &choice);
+    while (choice < 1 || choice > 4)
+    {
+        system("cls");
+        print_main_menu();
+        printf("Invalid choice! Please enter a valid choice: ");
+        scanf("%d", &choice);
+    }
+    // TODO: Implement the menu options later
+    if (choice = 1)
+    {
+        system("cls");
+    }
+    else if (choice = 2)
+    {
+        system("cls");
+    }
+    else if (choice = 3)
+    {
+        system("cls");
+    }
+    else if (choice = 4)
+    {
+        exit(0);
+    }
 }
 
 int main()
@@ -82,6 +113,7 @@ int main()
     start_time = time(NULL); // get the start time
 
     print_main_menu();
+    get_menu_selection();
 
     print_text(original_text, user_text);
 
