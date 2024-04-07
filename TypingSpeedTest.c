@@ -45,6 +45,22 @@ void print_speed(int press_count, int err_count, time_t start_time)
     printf("Elapsed time: %.4f seconds\n", difftime(time(NULL), start_time));
 }
 
+void print_main_menu()
+{
+    printf(" _____  _  _  _ __  _        __ _        ___  _ __               _        _____           _         \n");
+    printf("|_   _|| || || '_ \\(_) _ _  / _` |      / __|| '_ \\ ___  ___  __| |      |_   _| ___  ___| |_     \n");
+    printf("  | |   \\_. || .__/| || ' \\ \\__. |      \\__ \\| .__// -_)/ -_)/ _` |        | |  / -_)(_-/|  _| \n");
+    printf("  |_|   |__/ |_|   |_||_||_||___/       |___/|_|   \\___|\\___|\\__/_|        |_|  \\___|/__/ \\__| \n");
+    printf("\n");
+    printf("Welcome to the Typing Speed Test!\n");
+    printf("1. Play\n");
+    printf("2. Custom\n");
+    printf("3. Leaderboard\n");
+    printf("4. Exit\n");
+    printf("Please enter your choice: ");
+    getch();
+}
+
 int main()
 {
     system("cls");
@@ -64,6 +80,8 @@ int main()
     time_t start_time, end_time, current_time;
     double elapsed_time;
     start_time = time(NULL); // get the start time
+
+    print_main_menu();
 
     print_text(original_text, user_text);
 
