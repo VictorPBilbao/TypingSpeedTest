@@ -34,7 +34,14 @@ void print_speed(int press_count, int err_count, time_t start_time)
 {
     printf("Total of keypresses: %d\n", press_count);
     printf("Total of errors: %d\n", err_count);
-    printf("Accuracy: %.2f%%\n", (1 - (err_count / (float)press_count)) * 100);
+    if (press_count > 0)
+    {
+        printf("Accuracy: %.2f%%\n", (1 - (err_count / (float)press_count)) * 100);
+    }
+    else
+    {
+        printf("Accuracy: 100%%\n");
+    }
     printf("Elapsed time: %.4f seconds\n", difftime(time(NULL), start_time));
 }
 
