@@ -5,10 +5,13 @@
 #include <time.h>
 #include <windows.h>
 #include <locale.h>
+#include <stdbool.h>
 
-// char original_text[] = "A Hare was making fun of the Tortoise one day for being so slow. 'Do you ever get anywhere?' he asked with a mocking laugh. 'Yes,' replied the Tortoise, 'and I get there sooner than you think. I'll run you a race and prove it.' The Hare was much amused at the idea of running a race with the Tortoise, but for the fun of the thing he agreed. So the Fox, who had consented to act as judge, marked the distance and started the runners off. The Hare was soon far out of sight, and to make the Tortoise feel very deeply how ridiculous it was for him to try a race with a Hare, he lay down beside the course to take a nap until the Tortoise should catch up. The Tortoise meanwhile kept going slowly but steadily, and, after a time, passed the place where the Hare was sleeping. But the Hare slept on very peacefully; and when at last he did wake up, the Tortoise was near the goal. The Hare now ran his swiftest, but he could not overtake the Tortoise in time.";
-char original_text[] = "The quick brown fox jumps over the lazy dog.";
+char original_text[] = "A Hare was making fun of the Tortoise one day for being so slow. 'Do you ever get anywhere?' he asked with a mocking laugh. 'Yes,' replied the Tortoise, 'and I get there sooner than you think. I'll run you a race and prove it.' The Hare was much amused at the idea of running a race with the Tortoise, but for the fun of the thing he agreed. So the Fox, who had consented to act as judge, marked the distance and started the runners off. The Hare was soon far out of sight, and to make the Tortoise feel very deeply how ridiculous it was for him to try a race with a Hare, he lay down beside the course to take a nap until the Tortoise should catch up. The Tortoise meanwhile kept going slowly but steadily, and, after a time, passed the place where the Hare was sleeping. But the Hare slept on very peacefully; and when at last he did wake up, the Tortoise was near the goal. The Hare now ran his swiftest, but he could not overtake the Tortoise in time.";
+// char original_text[] = "The quick brown fox jumps over the lazy dog.";
 char user_text[100] = "";
+
+int TIME_LIMIT = 30;
 
 void print_main_menu()
 {
@@ -83,13 +86,13 @@ void print_text()
 
 float calculate_accuracy(int press_count, int err_count)
 {
-    if (press_count > 0)
+    if (err_count == press_count || press_count == 0)
     {
-        return (1 - (err_count / (float)press_count)) * 100;
+        return 0;
     }
     else
     {
-        return 100;
+        return (1 - (err_count / (float)press_count)) * 100;
     }
 }
 
@@ -103,20 +106,20 @@ void print_speed(int press_count, int err_count, time_t elapsed_time)
     printf("\nTotal of keypresses: %d\n", press_count);
     printf("Total of errors: %d\n", err_count);
     printf("Accuracy: %.2f%%\n", calculate_accuracy(press_count, err_count));
-    printf("Elapsed time: %.2f seconds\n", (float)elapsed_time);
+    // printf("Elapsed time: %.2f seconds\n", (float)elapsed_time);
+    printf("Time Left: %.2f seconds\n", TIME_LIMIT - (float)elapsed_time);
 }
 
 void show_statistics(int press_count, int err_count, time_t elapsed_time)
 {
     system("cls");
 
-    printf("Congratulations! You have typed the text correctly!: ");
-    print_text();
+    printf("\033[0;33mCongratulations! You have finished the test!\n\033[0m");
 
     printf("\nHere are your results:\n");
 
     printf("+---------------------------+-----------------+\n");
-    printf("| %-25s | %-15s |\n", "Metric (Unity)", "Value");
+    printf("| %-25s | %-15s |\n", "Metric (Measure)", "Value");
     printf("+---------------------------+-----------------+\n");
     printf("| %-25s | %-15.2f |\n", "Time Elapsed (s)", (float)elapsed_time);
     printf("| %-25s | %-15.2f |\n", "Percentage Completed (%)", (strlen(user_text) / (float)strlen(original_text)) * 100);
@@ -125,6 +128,10 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("| %-25s | %-15.2f |\n", "Accuracy (%)", calculate_accuracy(press_count, err_count));
     printf("| %-25s | %-15.2f |\n", "WPM", calculate_words_per_minute(press_count, err_count, elapsed_time));
     printf("+---------------------------+-----------------+\n");
+
+    Sleep(10000);
+    printf("\n Press any key to exit...");
+    getch();
 }
 
 int main()
@@ -141,19 +148,29 @@ int main()
 
     time_t start_time, end_time;
     double elapsed_time;
-    start_time = time(NULL); // get the start time
 
     hidecursor();
     print_main_menu();
     get_menu_selection();
     print_text();
 
+    // timer started flag ( bool variable )
+    bool timer_started = false;
+    start_time = 0; // initialize start_time to 0
+
     while (1)
     {
-        elapsed_time = difftime(time(NULL), start_time);
+        if (start_time != 0) // only calculate elapsed_time if start_time is not 0
+        {
+            elapsed_time = difftime(time(NULL), start_time);
+        }
         set_cursor_position(x, y);
         if (kbhit())
         {
+            if (start_time == 0) // if start_time is 0, set it to the current time
+            {
+                start_time = time(NULL);
+            }
             keypress = getch(); // capture a keypress
             press_count++;      // count the number of keypresses
             next_letter[0] = keypress;
@@ -168,7 +185,7 @@ int main()
                 err_count++;
             }
         }
-        if (strcmp(original_text, user_text) == 0)
+        if (strcmp(original_text, user_text) == 0 || (start_time != 0 && elapsed_time >= TIME_LIMIT)) // if the user has typed the entire text or 60 seconds have passed
         {
             break;
         }
