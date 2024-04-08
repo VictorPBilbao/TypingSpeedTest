@@ -11,6 +11,7 @@ char original_text[] = "A Hare was making fun of the Tortoise one day for being 
 // char original_text[] = "The quick brown fox jumps over the lazy dog.";
 char user_text[sizeof(original_text)] = "";
 char error_text[sizeof(original_text)] = "";
+char restOfString[sizeof(original_text)] = "";
 
 int TIME_LIMIT = 100;
 
@@ -83,7 +84,9 @@ void print_text()
 {
     printf("\033[0;32m%s\033[0m", user_text);
     printf("\033[0;31m%s\033[0m", error_text);
-    printf("%s \n", original_text + strlen(user_text) + strlen(error_text));
+    // printf("%s \n", original_text + strlen(user_text) + strlen(error_text));
+    strncpy(restOfString, original_text + strlen(user_text) + strlen(error_text), 100);
+    printf("%s", restOfString);
 }
 
 float calculate_accuracy(int press_count, int err_count)
@@ -105,7 +108,15 @@ float calculate_words_per_minute(int press_count, int err_count, time_t elapsed_
 
 void print_speed(int press_count, int err_count, time_t elapsed_time)
 {
-    printf("\nTotal of keypresses: %d\n", press_count);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    int y_position;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    y_position = csbi.srWindow.Bottom / 2; // This will get the middle of the screen
+
+    set_cursor_position(0, (int)(y_position / 2));
+
+    printf("Total of keypresses: %d\n", press_count);
     printf("Total of errors: %d\n", err_count);
     printf("Accuracy: %.2f%%\n", calculate_accuracy(press_count, err_count));
     // printf("Elapsed time: %.2f seconds\n", (float)elapsed_time);
