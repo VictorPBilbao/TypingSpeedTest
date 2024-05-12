@@ -71,11 +71,11 @@ void hidecursor()
     SetConsoleCursorInfo(consoleHandle, &info);
 }
 
-void set_cursor_position(int x, int y)
+void set_cursor_position(int *x, int *y)
 {
     COORD coord;
-    coord.X = x;
-    coord.Y = y;
+    coord.X = *x;
+    coord.Y = *y;
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(hConsole, coord);
 }
@@ -114,7 +114,9 @@ void print_speed(int press_count, int err_count, time_t elapsed_time)
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
     y_position = csbi.srWindow.Bottom / 2; // This will get the middle of the screen
 
-    set_cursor_position(0, (int)(y_position / 2));
+    int x_position = 0;
+    y_position = (int)(y_position / 2);
+    set_cursor_position(&x_position, &y_position);
 
     printf("Total of keypresses: %d\n", press_count);
     printf("Total of errors: %d\n", err_count);
@@ -177,7 +179,7 @@ int main()
         {
             elapsed_time = difftime(time(NULL), start_time);
         }
-        set_cursor_position(x, y);
+        set_cursor_position(&x, &y);
         if (kbhit())
         {
             if (start_time == 0) // if start_time is 0, set it to the current time
