@@ -101,9 +101,9 @@ float calculate_accuracy(int *press_count, int *err_count)
     }
 }
 
-float calculate_words_per_minute(int press_count, int err_count, time_t elapsed_time)
+float calculate_words_per_minute(int *press_count, int *err_count, time_t *elapsed_time)
 {
-    return (strlen(user_text) / 5.0) / (elapsed_time / 60.0);
+    return (strlen(user_text) / 5.0) / (*elapsed_time / 60.0);
 }
 
 void print_speed(int press_count, int err_count, time_t elapsed_time)
@@ -141,7 +141,7 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("| %-25s | %-15d |\n", "Total Keypresses", press_count);
     printf("| %-25s | %-15d |\n", "Total Errors", err_count);
     printf("| %-25s | %-15.2f |\n", "Accuracy (%)", calculate_accuracy(&press_count, &err_count));
-    printf("| %-25s | %-15.2f |\n", "WPM", calculate_words_per_minute(press_count, err_count, elapsed_time));
+    printf("| %-25s | %-15.2f |\n", "WPM", calculate_words_per_minute(&press_count, &err_count, &elapsed_time));
     printf("+---------------------------+-----------------+\n");
 
     Sleep(10000);
