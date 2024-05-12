@@ -13,7 +13,7 @@ char user_text[sizeof(original_text)] = "";
 char error_text[sizeof(original_text)] = "";
 char restOfString[sizeof(original_text)] = "";
 
-int TIME_LIMIT = 100;
+int TIME_LIMIT = 15;
 
 void print_main_menu()
 {
@@ -89,15 +89,15 @@ void print_text()
     printf("%s", restOfString);
 }
 
-float calculate_accuracy(int press_count, int err_count)
+float calculate_accuracy(int *press_count, int *err_count)
 {
-    if (err_count == press_count || press_count == 0)
+    if (*err_count == *press_count || *press_count == 0)
     {
         return 0;
     }
     else
     {
-        return (1 - (err_count / (float)press_count)) * 100;
+        return (1 - (*err_count / (float)*press_count)) * 100;
     }
 }
 
@@ -120,7 +120,7 @@ void print_speed(int press_count, int err_count, time_t elapsed_time)
 
     printf("Total of keypresses: %d\n", press_count);
     printf("Total of errors: %d\n", err_count);
-    printf("Accuracy: %.2f%%\n", calculate_accuracy(press_count, err_count));
+    printf("Accuracy: %.2f%%\n", calculate_accuracy(&press_count, &err_count));
     // printf("Elapsed time: %.2f seconds\n", (float)elapsed_time);
     printf("Time Left: %.2f seconds\n", TIME_LIMIT - (float)elapsed_time);
 }
@@ -140,7 +140,7 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("| %-25s | %-15.2f |\n", "Percentage Completed (%)", (strlen(user_text) / (float)strlen(original_text)) * 100);
     printf("| %-25s | %-15d |\n", "Total Keypresses", press_count);
     printf("| %-25s | %-15d |\n", "Total Errors", err_count);
-    printf("| %-25s | %-15.2f |\n", "Accuracy (%)", calculate_accuracy(press_count, err_count));
+    printf("| %-25s | %-15.2f |\n", "Accuracy (%)", calculate_accuracy(&press_count, &err_count));
     printf("| %-25s | %-15.2f |\n", "WPM", calculate_words_per_minute(press_count, err_count, elapsed_time));
     printf("+---------------------------+-----------------+\n");
 
