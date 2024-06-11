@@ -40,6 +40,7 @@ gcc TypingSpeedTest.c -o TypingSpeedTest
 ## Alunos
 
 - Victor Pasini Bilbao - GRR20231012
+- Patrick Correia Camilo  - GRR20231008
 
 ## Contribuição
 
