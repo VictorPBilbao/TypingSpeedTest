@@ -143,8 +143,7 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("| %-25s | %-15.2f |\n", "WPM", calculate_words_per_minute(&press_count, &err_count, &elapsed_time));
     printf("+---------------------------+-----------------+\n");
 
-    Sleep(10000);
-    printf("\nPress any key to exit...\n");
+    printf("\nPress any key to return to the main menu...\n");
     getch();
 }
 
@@ -202,42 +201,45 @@ void handle_keypress(int *keypress, int *press_count, char *next_letter, int *in
 
 int main()
 {
-    system("cls");
-    int keypress;
-    char next_letter[2];
-    int index_position;
-    int err_count;
-    int press_count;
-    int x, y; // Set these to the position where you want to start drawing
-    time_t start_time;
-    double elapsed_time;
-    bool timer_started;
-
-    initialize_variables(&keypress, next_letter, &index_position, &err_count, &press_count, &x, &y, &start_time, &elapsed_time, &timer_started);
-
-    hidecursor();
-    print_main_menu();
-    get_menu_selection();
-    print_text();
-
     while (1)
     {
-        if (start_time != 0) // only calculate elapsed_time if start_time is not 0
-        {
-            elapsed_time = difftime(time(NULL), start_time);
-        }
-        set_cursor_position(&x, &y);
-        if (kbhit())
-        {
-            handle_keypress(&keypress, &press_count, next_letter, &index_position, &err_count, &start_time, &timer_started);
-        }
-        if ((strcmp(original_text, user_text) == 0 && strlen(error_text) == 0) || (start_time != 0 && elapsed_time >= TIME_LIMIT)) // if the user has typed the entire text or 60 seconds have passed
-        {
-            break;
-        }
+        system("cls");
+        int keypress;
+        char next_letter[2];
+        int index_position;
+        int err_count;
+        int press_count;
+        int x, y; // Set these to the position where you want to start drawing
+        time_t start_time;
+        double elapsed_time;
+        bool timer_started;
+
+        initialize_variables(&keypress, next_letter, &index_position, &err_count, &press_count, &x, &y, &start_time, &elapsed_time, &timer_started);
+
+        hidecursor();
+        print_main_menu();
+        get_menu_selection();
         print_text();
-        print_speed(&press_count, &err_count, elapsed_time);
+
+        while (1)
+        {
+            if (start_time != 0) // only calculate elapsed_time if start_time is not 0
+            {
+                elapsed_time = difftime(time(NULL), start_time);
+            }
+            set_cursor_position(&x, &y);
+            if (kbhit())
+            {
+                handle_keypress(&keypress, &press_count, next_letter, &index_position, &err_count, &start_time, &timer_started);
+            }
+            if ((strcmp(original_text, user_text) == 0 && strlen(error_text) == 0) || (start_time != 0 && elapsed_time >= TIME_LIMIT)) // if the user has typed the entire text or 60 seconds have passed
+            {
+                break;
+            }
+            print_text();
+            print_speed(&press_count, &err_count, elapsed_time);
+        }
+        show_statistics(press_count, err_count, elapsed_time);
     }
-    show_statistics(press_count, err_count, elapsed_time);
     return 0;
 }
