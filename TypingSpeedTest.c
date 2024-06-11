@@ -26,9 +26,7 @@ void print_main_menu()
     printf("\n");
     printf("Welcome to the Typing Speed Test!\n");
     printf("1. Play\n");
-    printf("2. Custom\n");
-    printf("3. Leaderboard\n");
-    printf("4. Exit\n");
+    printf("2. Exit\n");
 }
 
 void get_menu_selection()
