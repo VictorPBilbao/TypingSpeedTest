@@ -106,7 +106,7 @@ float calculate_words_per_minute(int *press_count, int *err_count, time_t *elaps
     return (strlen(user_text) / 5.0) / (*elapsed_time / 60.0);
 }
 
-void print_speed(int press_count, int err_count, time_t elapsed_time)
+void print_speed(int *press_count, int *err_count, time_t elapsed_time)
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     int y_position;
@@ -118,10 +118,9 @@ void print_speed(int press_count, int err_count, time_t elapsed_time)
     y_position = (int)(y_position / 2);
     set_cursor_position(&x_position, &y_position);
 
-    printf("Total of keypresses: %d\n", press_count);
-    printf("Total of errors: %d\n", err_count);
-    printf("Accuracy: %.2f%%\n", calculate_accuracy(&press_count, &err_count));
-    // printf("Elapsed time: %.2f seconds\n", (float)elapsed_time);
+    printf("Total of keypresses: %d\n", *press_count);
+    printf("Total of errors: %d\n", *err_count);
+    printf("Accuracy: %.2f%%\n", calculate_accuracy(press_count, err_count));
     printf("Time Left: %.2f seconds\n", TIME_LIMIT - (float)elapsed_time);
 }
 
@@ -222,7 +221,7 @@ int main()
             break;
         }
         print_text();
-        print_speed(press_count, err_count, elapsed_time);
+        print_speed(&press_count, &err_count, elapsed_time);
     }
 
     show_statistics(press_count, err_count, elapsed_time);
