@@ -13,7 +13,7 @@ char user_text[sizeof(original_text)] = "";
 char error_text[sizeof(original_text)] = "";
 char restOfString[sizeof(original_text)] = "";
 
-int TIME_LIMIT = 15;
+int TIME_LIMIT = 30;
 
 void print_main_menu()
 {
@@ -141,6 +141,7 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("| %-25s | %-15.2f |\n", "WPM", calculate_words_per_minute(&press_count, &err_count, &elapsed_time));
     printf("+---------------------------+-----------------+\n");
 
+    Sleep(10000);
     printf("\nPress any key to return to the main menu...\n");
     getch();
 }
