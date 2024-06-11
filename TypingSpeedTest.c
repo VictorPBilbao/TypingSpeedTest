@@ -148,29 +148,77 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     getch();
 }
 
+void initialize_variables(int *keypress, char *next_letter, int *index_position, int *err_count, int *press_count, int *x, int *y, time_t *start_time, double *elapsed_time, bool *timer_started)
+{
+    *keypress = 0;
+    *next_letter = '\0';
+    *index_position = 0;
+    *err_count = 0;
+    *press_count = 0;
+    *x = 0;
+    *y = 0;
+    *start_time = 0;
+    *elapsed_time = 0.0;
+    *timer_started = false;
+}
+
+void handle_keypress(int *keypress, int *press_count, char *next_letter, int *index_position, int *err_count, time_t *start_time, bool *timer_started)
+{
+    if (*start_time == 0) // if start_time is 0, set it to the current time
+    {
+        *start_time = time(NULL);
+    }
+    *keypress = getch(); // capture a keypress
+    (*press_count)++;    // count the number of keypresses
+    next_letter[0] = *keypress;
+    next_letter[1] = '\0'; // convert int to string
+    if (next_letter[0] == original_text[*index_position])
+    {
+        if (strlen(error_text) == 0)
+        {
+            strcat(user_text, next_letter);
+            (*index_position)++;
+        }
+        else
+        {
+            strcat(error_text, next_letter);
+            (*err_count)++;
+        }
+    }
+    else if (*keypress == 8)
+    {
+        if (strlen(error_text) > 0)
+        {
+            error_text[strlen(error_text) - 1] = '\0';
+        }
+    }
+    else
+    {
+        strcat(error_text, next_letter);
+        (*err_count)++;
+        Beep(350, 150);
+    }
+}
+
 int main()
 {
     system("cls");
-
     int keypress;
     char next_letter[2];
-    int index_position = 0;
-    int err_count = 0;
-    int press_count = 0;
-
-    int x = 0, y = 0; // Set these to the position where you want to start drawing
-
-    time_t start_time, end_time;
+    int index_position;
+    int err_count;
+    int press_count;
+    int x, y; // Set these to the position where you want to start drawing
+    time_t start_time;
     double elapsed_time;
+    bool timer_started;
+
+    initialize_variables(&keypress, next_letter, &index_position, &err_count, &press_count, &x, &y, &start_time, &elapsed_time, &timer_started);
 
     hidecursor();
     print_main_menu();
     get_menu_selection();
     print_text();
-
-    // timer started flag ( bool variable )
-    bool timer_started = false;
-    start_time = 0; // initialize start_time to 0
 
     while (1)
     {
@@ -181,40 +229,7 @@ int main()
         set_cursor_position(&x, &y);
         if (kbhit())
         {
-            if (start_time == 0) // if start_time is 0, set it to the current time
-            {
-                start_time = time(NULL);
-            }
-            keypress = getch(); // capture a keypress
-            press_count++;      // count the number of keypresses
-            next_letter[0] = keypress;
-            next_letter[1] = '\0'; // convert int to string
-            if (next_letter[0] == original_text[index_position])
-            {
-                if (strlen(error_text) == 0)
-                {
-                    strcat(user_text, next_letter);
-                    index_position++;
-                }
-                else
-                {
-                    strcat(error_text, next_letter);
-                    err_count++;
-                }
-            }
-            else if (keypress == 8)
-            {
-                if (strlen(error_text) > 0)
-                {
-                    error_text[strlen(error_text) - 1] = '\0';
-                }
-            }
-            else
-            {
-                strcat(error_text, next_letter);
-                err_count++;
-                Beep(350, 150);
-            }
+            handle_keypress(&keypress, &press_count, next_letter, &index_position, &err_count, &start_time, &timer_started);
         }
         if ((strcmp(original_text, user_text) == 0 && strlen(error_text) == 0) || (start_time != 0 && elapsed_time >= TIME_LIMIT)) // if the user has typed the entire text or 60 seconds have passed
         {
@@ -223,8 +238,6 @@ int main()
         print_text();
         print_speed(&press_count, &err_count, elapsed_time);
     }
-
     show_statistics(press_count, err_count, elapsed_time);
-
     return 0;
 }
