@@ -31,6 +31,12 @@ gcc TypingSpeedTest.c -o TypingSpeedTest
 - O programa calcula o número total de erros de digitação do usuário.
 - O programa limita o tempo de digitação a 30 segundos.
 
+## Futuras melhorias
+
+- Adicionar mais textos para o usuário digitar.
+- Adicionar mais opções ao menu principal.
+- Adicionar um sistema de pontuação para o usuário ( LEADERBOARD ).
+
 ## Alunos
 
 - Victor Pasini Bilbao - GRR20231012
