@@ -13,7 +13,7 @@ char user_text[sizeof(original_text)] = "";
 char error_text[sizeof(original_text)] = "";
 char restOfString[sizeof(original_text)] = "";
 
-int TIME_LIMIT = 30;
+int TIME_LIMIT = 60;
 
 void print_main_menu()
 {
