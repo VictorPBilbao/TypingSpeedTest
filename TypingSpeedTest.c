@@ -48,14 +48,6 @@ void get_menu_selection()
     }
     else if (choice = 2)
     {
-        system("cls");
-    }
-    else if (choice = 3)
-    {
-        system("cls");
-    }
-    else if (choice = 4)
-    {
         exit(0);
     }
 }
