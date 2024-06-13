@@ -10,7 +10,7 @@ Para executar este projeto, você precisa ter um compilador C instalado em seu s
 
 1. Primeiro, clone este repositório para o seu sistema local.
 2. Navegue até o diretório do projeto.
-3. Compile o arquivo [`TypingSpeedTest.c`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fc%3A%2FUsers%2Fvicto%2FOneDrive%2FTADS%2F2_Semestre%2FLinguagemDeProgramacao%2FTypingSpeedTest%2FTypingSpeedTest.c%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "c:\Users\victo\OneDrive\TADS\2_Semestre\LinguagemDeProgramacao\TypingSpeedTest\TypingSpeedTest.c") usando o seguinte comando:
+3. Compile o arquivo [`TypingSpeedTest.c`](./TypingSpeedTest.c) usando o seguinte comando:
 
 ```sh
 gcc TypingSpeedTest.c -o TypingSpeedTest
