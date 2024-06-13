@@ -42,11 +42,11 @@ void get_menu_selection()
         scanf("%d", &choice);
     }
     // TODO: Implement the menu options later
-    if (choice = 1)
+    if (choice == 1)
     {
         system("cls");
     }
-    else if (choice = 2)
+    else if (choice == 2)
     {
         exit(0);
     }
@@ -134,8 +134,7 @@ void show_statistics(int press_count, int err_count, time_t elapsed_time)
     printf("+---------------------------+-----------------+\n");
 
     Sleep(10000);
-    printf("\nPress any key to return to the main menu...\n");
-    getch();
+    system("pause");
 }
 
 void initialize_variables(int *keypress, char *next_letter, int *index_position, int *err_count, int *press_count, int *x, int *y, time_t *start_time, double *elapsed_time, bool *timer_started)
